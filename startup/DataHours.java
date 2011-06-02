@@ -66,4 +66,8 @@ public class DataHours implements Serializable {
 	public String toString(){
 		return dd.toString()+MM.toString()+yyyy.toString()+hh.toString()+mm.toString();
 	}
+	
+	public String toDuration(){
+		return hh.toString() + ":" + mm.toString();
+	}
 }

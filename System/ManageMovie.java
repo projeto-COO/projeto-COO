@@ -50,7 +50,7 @@ public class ManageMovie extends ManageMovies {
 
 			switch (option) {
 			case 1:
-				viewMovie();
+				viewMovie("view");
 				break;
 			case 2:
 				modifyMovie();
@@ -85,6 +85,7 @@ public class ManageMovie extends ManageMovies {
 				dimension, language, duration);
 		mapMovieData.put(idMovie, newMovieData);
 		historic.AddHistoricModify("Criado o fime: " + newMovieData.toString());
+		uploadData();
 		System.out.println("Filme criado");
 	}
 
@@ -93,7 +94,7 @@ public class ManageMovie extends ManageMovies {
 	 */
 	private void modifyMovie() {
 		Scanner scanner = new Scanner(System.in);
-		MovieData currentMovie = chooseMovie();
+		MovieData currentMovie = chooseMovie("modify");
 		if (currentMovie == null)
 			return;
 
@@ -102,32 +103,29 @@ public class ManageMovie extends ManageMovies {
 		Integer ageRate = null;
 		String dimension = null;
 		String language = null;
+		String duration = null;
 
 		boolean verify = false;
 		do {
 			try {
 				System.out.println("\nModificando Filme...");
-				System.out.println("\nNome (" + currentMovie.getName() + "): ");
+				System.out.print("\nNome (" + currentMovie.getName() + "): ");
 				name = scanner.next();
-				System.out.println("\nGenero (" + currentMovie.getGender()
-						+ "): ");
+				System.out.print("\nGenero (" + currentMovie.getGender()	+ "): ");
 				gender = scanner.next();
-				System.out.println("\nFaixa Etaria ("
-						+ currentMovie.getAgeRate() + "): ");
+				System.out.print("\nFaixa Etaria (" + currentMovie.getAgeRate() + "): ");
 				ageRate = scanner.nextInt();
-				System.out.println("\nDimensao (" + currentMovie.getDimension()
-						+ "): ");
+				System.out.print("\nDimensao (" + currentMovie.getDimension()	+ "): ");
 				dimension = scanner.next();
-				System.out.println("\nIdioma (" + currentMovie.getLanguage()
-						+ "): ");
+				System.out.print("\nIdioma (" + currentMovie.getLanguage() + "): ");
 				language = scanner.next();
+				System.out.print("\nDuracao (" + currentMovie.getDuration().toDuration() + "): ");
+				duration = scanner.next();
 				verify = true;
 			} catch (InputMismatchException e) {
-				System.out.printf("%s", e);
 				System.out.println("Insira uma dimensao valida");
 				scanner = new Scanner(System.in);
 			} catch (NumberFormatException e) {
-				System.out.printf("%s", e);
 				System.out.println("Erro de formato, insira novamente");
 				scanner = new Scanner(System.in);
 			}
@@ -138,26 +136,23 @@ public class ManageMovie extends ManageMovies {
 		currentMovie.setAgeRate(ageRate);
 		currentMovie.setDimension(dimension);
 		currentMovie.setLanguage(language);
-
+		currentMovie.setDuration(selectDuration(duration));
+		
 		mapMovieData.put(currentMovie.getIdMovie(), currentMovie);
-
 		historic.AddHistoricModify("Modificado o fime: "
 				+ currentMovie.toString());
+		uploadData();
 	}
 	
 	/**
 	 * Deleta um filme
 	 */
 	private void deleteMovie() {
-		MovieData currentMovie = chooseMovie();
+		MovieData currentMovie = chooseMovie("delete");
 		if (currentMovie == null) {
 			System.out.println("\nVoce nao selecionou nenhum Filme");
 			return;
-		}
-		if(currentMovie.isSold()){
-			System.out.println("\nEsse filme ja tem sessao agendada.");
-		}
-		else {
+		} else {
 			System.out.println("\nExcluido o filme e todas as suas sessoes");
 			mapMovieData.remove(currentMovie.getIdMovie());
 			for (Integer room : mapSessionData.keySet()) {
@@ -172,6 +167,7 @@ public class ManageMovie extends ManageMovies {
 			historic
 					.AddHistoricModify("Excluido o filme e todas as suas sessoes: "
 							+ currentMovie.toString());
+			uploadData();
 		}
 	}
 
@@ -321,13 +317,20 @@ public class ManageMovie extends ManageMovies {
 				dateString = scanner.next();
 				continueLoop = true;
 				
-				newData = new DataHours(1, 1, 1, new Integer(
-						dateString.substring(0, 2)), new Integer(dateString.substring(3, 5)));
+				newData = selectDuration(dateString);
 			} catch (IllegalArgumentException e) {
 				System.out.println("Valores invalidos." + e);
 				scanner = new Scanner(System.in);
 			}
 		} while (!continueLoop || !checkData(newData));
 		return newData;
+	}
+	
+	private DataHours selectDuration(String newData) throws InputMismatchException{
+		try{
+			return new DataHours(1, 1, 1, new Integer(newData.substring(0, 2)), new Integer(newData.substring(3, 5)));
+		}catch (InputMismatchException e) {
+			throw e;
+		}
 	}
 }

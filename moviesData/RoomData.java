@@ -3,9 +3,6 @@ package moviesData;
 
 import java.io.Serializable;
 
-import System.TicketSale;
-
-
 /**
  * Classe que possui todos os atributos de uma Sala
  */
@@ -17,7 +14,6 @@ public class RoomData implements Serializable {
 	private Integer rows;
 	private Integer columns;
 	private Integer capacity;
-	private Integer availability;
 	private boolean sold;
 
 	// CONSTRUTOR DA CLASSE Room.
@@ -26,24 +22,14 @@ public class RoomData implements Serializable {
 		this.rows = rows;
 		this.columns = columns;
 		this.capacity = rows * columns;
-		this.availability = this.capacity;
 		this.setSold(false);
 		room = new boolean[rows][columns];
 	}
-	TicketSale test = new TicketSale();
+
 	void recalculate() {
 		this.capacity = rows * columns;
-		this.availability = this.capacity;
-	}
+	}	
 	
-	public void updateAvailability(){
-		availability = availability - test.verifySpots();
-	}
-	
-	public int availability() { 
-		return availability;
-	}
-
 	public Integer getIdRoom() {
 		return idRoom;
 	}
@@ -87,12 +73,11 @@ public class RoomData implements Serializable {
 	}
 
 	public String toString() {
-		return "Codigo:" + idRoom + "\tQtd.Lugares-" + capacity	+ "\tQtd.Dispo-" + availability;
+		return "Codigo:" + idRoom + "\tQtd.Lugares-" + capacity	+ "\tVenda: " + (isSold() ? "True" : "False");
 	}
 
 	public void toShow() {
-		System.out.println("Codigo:" + idRoom + "\tQtd.Lugares-" + capacity
-				+ "\tQtd.Dispo-" + availability+"\tVenda: " + (isSold() ? "True" : "False"));
+		System.out.println("Codigo:" + idRoom + "\tQtd.Lugares-" + capacity + "\tVenda: " + (isSold() ? "True" : "False"));
 	}
 
 	public void setSold(boolean sold) {

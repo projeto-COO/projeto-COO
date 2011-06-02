@@ -15,6 +15,7 @@ public class SessionData implements Serializable {
 	private DataHours end;
 	private RoomData currentRoom;
 	private String idSession;
+	private Integer availability;
 	private boolean sold; // Verifica se a sessao ja foi vendida
 
 	public SessionData(MovieData currentMovie, DataHours date,
@@ -25,6 +26,7 @@ public class SessionData implements Serializable {
 		this.setSold(false);
 		createID();
 		modifyEnd();
+		setAvailability(this.currentRoom.getCapacity());
 	}
 
 	public MovieData getCurrentMovie() {
@@ -53,6 +55,7 @@ public class SessionData implements Serializable {
 	public void setCurrentRoom(RoomData currentRoom) {
 		this.currentRoom = currentRoom;
 		createID();
+		setAvailability(this.currentRoom.getCapacity());
 	}
 
 	public String getIdSession() {
@@ -61,6 +64,19 @@ public class SessionData implements Serializable {
 	
 	public DataHours getEnd() {
 		return end;
+	}
+	
+	public Integer getAvailability() {
+		return availability;
+	}
+
+	public void setAvailability(Integer availability) {
+		this.availability = availability;
+	}
+
+	//Atualiza os lugares disponiveis da sessao
+	public void updateAvailability(int value){
+		availability = availability - value;
 	}
 	
 	/**
@@ -95,24 +111,20 @@ public class SessionData implements Serializable {
 
 	public void toShow() {
 		System.out.println("Codigo:" + idSession + "\tFilme-"
-				+ currentMovie.getName() + "\tSala-" + currentRoom.getIdRoom()
-				+ "\tQtd.Lug-" + currentRoom.getCapacity() + "\tHorario "
-				+ viewDate() + "\tVenda: " + (isSold() ? "True" : "False"));
+				+ this.currentMovie.getName() + "\tSala-" + this.currentRoom.getIdRoom()
+				+ (getAvailability() != 0 ? "\tQtd.Lug-" + getAvailability() : "\t**ESGOTADO**" ) 
+				+ "\tHorario "	+ viewDate() + "\tVenda: " + (isSold() ? "True" : "False"));
 	}
 
 	public String toString() {
-		return "Codigo:" + idSession + "\tFilme-" + currentMovie.getName()
-				+ "\tSala-" + currentRoom.getIdRoom() + "\tQtd.Lug-"
-				+ currentRoom.getCapacity() + "\tHorario " + viewDate();
+		return "Codigo:" + idSession + "\tFilme-" + this.currentMovie.getName()
+				+ "\tSala-" + this.currentRoom.getIdRoom() + "\tQtd.Lug-"
+				+ getAvailability() + "\tHorario " + viewDate();
 	}
 
 	public String viewDate() {
 		return date.dd() + "/" + date.MM() + "/" + date.yyyy() + " "
-				+ date.hh() + ":" + date.mm();
-	}
-
-	public int getAvailable() {
-		return currentRoom.availability();
+				+ date.hh() + "h" + date.mm()+"min";
 	}
 
 	public void setSold(boolean sold) {

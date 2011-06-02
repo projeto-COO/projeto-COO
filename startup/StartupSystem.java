@@ -53,19 +53,15 @@ public class StartupSystem {
 					if(option<1 || option>5)test = false;
 					else test = true;
 				} catch (InputMismatchException e) {
-					System.out.printf("%s", e);
 					System.out.println("Digite novamente.");
 					test = false;
-					scanner = new Scanner(System.in);
-					
+					scanner = new Scanner(System.in);					
 				} catch (IllegalArgumentException e) {
-					System.out.printf("%s", e);
 					System.out.println("Entre com valores validos.");
 					scanner.reset();
 					test = false;
 					scanner = new Scanner(System.in);
-				}
-	
+				}	
 			} while (!test);
 			
 			switch (option) {

@@ -15,41 +15,18 @@ import startup.StartupSystem;
 public class TicketSale extends StartupSystem {
 
 	HistoricData historic = new HistoricData();
-	//String sendToHist = null;
-	public int optSession;
-	public int optChair;
 	public int spots =0;
 	private SessionData currentSession;
 
-	/**
-	 * Metodo principal na escolha e finalizacao da compra
-	 */
-	public int verifySpots(){
-		Scanner scanner = new Scanner(System.in);
-		
-		boolean sell = true;
-		
-		do{
-			
-			try{
-			System.out.println("Ingressos para quantas pessoas?");
-			spots = scanner.nextInt();
-			sell=false;
-			}
-			catch(InputMismatchException e){
-				System.out.println("Entre com valores validos");
-			}}while(sell);
-		return spots;
-	}
 	public void mainScreem() {
 		Scanner scanner = new Scanner(System.in);
-		optSession = 0;
-		optChair = 0;
 		int endBuy = 0;
-		ManageSession session = new ManageSession();
 		boolean sessionEmpty = true;
+		ManageSession session = new ManageSession();
+		
 		System.out.println("\nSISTEMA DE VENDA DE INGRESSO\n");
 		System.out.println("Nova Compra");
+
 		try {
 			do {
 				currentSession = session.chooseSession("buy");
@@ -57,9 +34,9 @@ public class TicketSale extends StartupSystem {
 					sessionEmpty = false;
 			} while (sessionEmpty);
 
-			currentSession.getCurrentRoom().updateAvailability();
+			currentSession.updateAvailability(verifySpots(currentSession));
 			System.out.println("Quantidade de Lugares Disponiveis: "
-					+ currentSession.getAvailable());
+					+ currentSession.getAvailability());
 			do {
 				System.out.print("Confirmar Compra(Sim(1)/ Nao(2))? ");
 				endBuy = scanner.nextInt();
@@ -68,15 +45,38 @@ public class TicketSale extends StartupSystem {
 			if (endBuy == 1) {
 				historic.AddHistoricSeller("Venda: "+ currentSession.toString());
 				System.out.println("\nCompra Finalizada Com Sucesso. Imprimindo Ticket.");
-				//sendToHist = Integer.toString(Integer.parseInt(currentSession.getIdSession()));
 				tagsale(currentSession);
+				uploadData();
 			}
 		} catch (NullPointerException e) {
-			System.out.println("Valor de entrada invalido, digitar novamamente");
+			System.out.println("\nValor de entrada invalido, digitar novamamente");
 			scanner = new Scanner(System.in);
 		}
 	}
 	
+	/**
+	 * Metodo principal na escolha e finalizacao da compra
+	 */
+	public int verifySpots(SessionData currentSession){
+		Scanner scanner = new Scanner(System.in);
+		boolean error = false;
+		
+		do{			
+			try{
+				System.out.print("\nIngressos para quantas pessoas: ");
+				spots = scanner.nextInt();
+				
+				if(spots <=0  || (currentSession.getAvailability() - spots) < 0){
+					System.out.println("\nValor não corresponde com o restante de ingressos!");
+					error = true;
+				}else error = false;
+			}catch(InputMismatchException e){
+				System.out.println("Entre com valores validos");
+				error = true;
+			}
+		}while(error);	
+		return spots;
+	}
 	
 	/**
 	 * Marca a sessao, o filme e a sala como vendida

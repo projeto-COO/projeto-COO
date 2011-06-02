@@ -52,16 +52,13 @@ public class ManageMovies extends StartupSystem {
 					if (option < 1 || option > 4) {
 						System.out.print("\nValor invalido. Digite novamente.\n");
 						error = true;
-					} else
-						error = false;
+					} else	error = false;
 				} while (error);
 
 			} catch (NumberFormatException e) {
-				System.out.printf("%s", e);
 				System.out.println("Erro de formato, insira novamente");
 				scanner = new Scanner(System.in);
 			} catch (InputMismatchException e) {
-				System.out.printf("%s", e);
 				System.out.println("Insira codigo valido");
 				scanner = new Scanner(System.in);
 			}
@@ -90,20 +87,26 @@ public class ManageMovies extends StartupSystem {
 	 * Metodo que retorna um filme escolhido, caso tenha
 	 * @return
 	 */
-	protected MovieData chooseMovie() {
+	protected MovieData chooseMovie(String restriction) {
 		Scanner scanner = new Scanner(System.in);
 		Integer chooseMovie = 0;
-
+		boolean error = false;
 		if (mapMovieData.isEmpty()) {
 			System.out.println("\nE necessario cadastrar filmes");
 			return null;
 		}else{
-			viewMovie();
+			viewMovie(restriction);
 			do {
-				System.out.print("Digite o codigo do filme: ");
-				chooseMovie = scanner.nextInt();
-			} while (false);
-	
+				try{
+					System.out.print("Digite o codigo do filme: ");
+					chooseMovie = scanner.nextInt();
+					error = false;
+				}catch (InputMismatchException e) {
+					System.out.println("Insira codigo valido");
+					scanner = new Scanner(System.in);
+					error = true;
+				}
+			} while (error);
 			return mapMovieData.get(chooseMovie);
 		}
 	}
@@ -112,20 +115,26 @@ public class ManageMovies extends StartupSystem {
 	 * Método que retorna uma sala escolhida
 	 * @return
 	 */
-	protected RoomData chooseRoom() {
+	protected RoomData chooseRoom(String restriction) {
 		Scanner scanner = new Scanner(System.in);
 		Integer chooseRoom = 0;
-
+		boolean error = false;
 		if (mapRoomData == null || mapRoomData.isEmpty()) {
 			System.out.println("\nE necessario criar salas");
 			return null;
 		}
-		viewRoom();
+		viewRoom(restriction);
 		do {
-			System.out.print("Digite o codigo da sala: ");
-			chooseRoom = scanner.nextInt();
-		} while (false);
-
+			try{
+				System.out.print("Digite o codigo da sala: ");
+				chooseRoom = scanner.nextInt();
+				error = false;
+			}catch (InputMismatchException e) {
+				System.out.println("Insira codigo valido");
+				scanner = new Scanner(System.in);
+				error = true;
+			}
+		} while (error);
 		return mapRoomData.get(chooseRoom);
 	}
 
@@ -141,21 +150,19 @@ public class ManageMovies extends StartupSystem {
 		boolean error = false;
 		
 		do{
-			System.out.print("\nDigite a data da sessao(dd-mm-yyyy): ");
+			System.out.print("\nDigite a data e horario da sessao(dd/mm/yyyy-hh:mm): ");
 			calendarString = scanner.next();
-	
-			System.out.print("Digite o horario da sessao(hh-mm): ");
-			dateString = scanner.next();
-			
 			try{
 				date = new DataHours(new Integer(calendarString.substring(0,
 						2)), new Integer(calendarString.substring(3, 5)), new Integer(
 						calendarString.substring(6, 10)), new Integer(
-						dateString.substring(0, 2)), new Integer(dateString.substring(
-						3, 5)));
+						calendarString.substring(11, 13)), new Integer(calendarString.substring(
+						14, 16)));
+				
 				error = false;
 			}catch(StringIndexOutOfBoundsException e){
 				error = true;
+				scanner = new Scanner(System.in);
 			}
 		}while(error);
 		
@@ -179,14 +186,18 @@ public class ManageMovies extends StartupSystem {
 	/**
 	 * Exibe todas as sessoes
 	 */
-	protected void viewSession() {
+	protected void viewSession(String restriction) {
 		if (mapSessionData.isEmpty())
 			System.out.println("\nNao existem sessoes cadastradas");
 		else {
 			System.out.println("\nExibindo Sessoes..");
 			for (Integer roomNow : mapSessionData.keySet()) {
-				for (String dates : mapSessionData.get(roomNow).keySet())
-					mapSessionData.get(roomNow).get(dates).toShow();
+				for (String sessionNow : mapSessionData.get(roomNow).keySet()){
+					if (restriction.equals("delete")|| restriction.equals("modify")) {
+						if (!mapSessionData.get(roomNow).get(sessionNow).isSold())
+							mapSessionData.get(roomNow).get(sessionNow)	.toShow();
+					}else	mapSessionData.get(roomNow).get(sessionNow).toShow();
+				}
 			}
 		}
 	}
@@ -194,27 +205,35 @@ public class ManageMovies extends StartupSystem {
 	/**
 	 * Exibe todos os filmes
 	 */
-	protected void viewMovie() {
+	protected void viewMovie(String restriction) {
 		if (mapMovieData.isEmpty()) {
 			System.out.println("\nNao existem filmes cadastrados");
 		} else {
 			System.out.println("\nExibindo Filmes...");
-			for (Integer movieNow : mapMovieData.keySet())
-				mapMovieData.get(movieNow).toShow();
+			for (Integer movieNow : mapMovieData.keySet()){
+				if(restriction.endsWith("delete") || restriction.equals("modify")){
+					if(! mapMovieData.get(movieNow).isSold())
+						mapMovieData.get(movieNow).toShow();
+				}else mapMovieData.get(movieNow).toShow();					
+			}				
 		}
 	}
 
 	/**
 	 * Exibe todas as salas
 	 */
-	protected void viewRoom() {
+	protected void viewRoom(String restriction) {
 		if (mapRoomData.isEmpty()) {
 			System.out.println("Nao existem salas cadastradas");
 		} else {
 			System.out.println("\nExibindo sala...");
 			Iterator<Integer> iterator = mapRoomData.keySet().iterator();
-			while (iterator.hasNext())
-				mapRoomData.get(iterator.next()).toShow();
+			while (iterator.hasNext()){
+				if(restriction.equals("delete") ||  restriction.equals("modify")){
+					if(!mapRoomData.get(iterator.next()).isSold())
+						mapRoomData.get(iterator.next()).toShow();
+				}else mapRoomData.get(iterator.next()).toShow();
+			}
 		}
 	}
 	

@@ -48,7 +48,7 @@ public class ManageRoom extends ManageMovies {
 			}
 			switch (option) {
 			case 1:
-				viewRoom();
+				viewRoom("view");
 				break;
 			case 2:
 				modifyRoom();
@@ -79,6 +79,7 @@ public class ManageRoom extends ManageMovies {
 		RoomData newRoomData = new RoomData(idRoom, rows, columns);
 		mapRoomData.put(idRoom, newRoomData);
 		historic.AddHistoricModify("Criada a sala: " + newRoomData.toString());
+		uploadData();
 		System.out.println("Sala criada");
 	}
 	
@@ -87,7 +88,7 @@ public class ManageRoom extends ManageMovies {
 	 */
 	private void modifyRoom() {
 		Scanner scanner = new Scanner(System.in);
-		RoomData currentRoom = chooseRoom();
+		RoomData currentRoom = chooseRoom("modify");
 
 		if (currentRoom == null)
 			return;
@@ -98,11 +99,9 @@ public class ManageRoom extends ManageMovies {
 		do {
 			try {
 				System.out.println("\nModificando Sala...");
-				System.out.print("\nQtd. de fileiras (" + currentRoom.getRows()
-						+ "): ");
+				System.out.print("\nQtd. de fileiras (" + currentRoom.getRows()	+ "): ");
 				rows = scanner.nextInt();
-				System.out.print("\nQtd. de colunas ("
-						+ currentRoom.getColumns() + "): ");
+				System.out.print("\nQtd. de colunas ("+ currentRoom.getColumns() + "): ");
 				columns = scanner.nextInt();
 				if (rows <= 0 || columns <= 0) {
 					System.out
@@ -126,28 +125,25 @@ public class ManageRoom extends ManageMovies {
 		mapRoomData.put(currentRoom.getIdRoom(), currentRoom);
 		historic.AddHistoricModify("Modificada a sala: "
 				+ currentRoom.toString());
+		uploadData();
 	}
 
 	/**
 	 * Deleta uma sala
 	 */
 	private void deleteRoom() {
-		RoomData currentRoom = chooseRoom();
+		RoomData currentRoom = chooseRoom("delete");
 		if (currentRoom == null) {
 			System.out.print("\nVoce nao selecionou nenhuma sala");
 			return;
-		}
-		if(currentRoom.isSold()){
-			System.out.print("\nNao é possivel exclusao da sala apos vendido o ticket");
-			return;
-		}
-		else {
+		} else {
 			System.out.println("\nExcluida a sala e todas as suas sessoes");
 			mapRoomData.remove(currentRoom.getIdRoom());
 			mapSessionData.remove(currentRoom.getIdRoom());
 			historic
 					.AddHistoricModify("Excluida a sala e todas as suas sessoes: "
 							+ currentRoom.toString());
+			uploadData();
 		}
 	}
 	
