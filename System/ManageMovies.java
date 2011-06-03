@@ -100,7 +100,11 @@ public class ManageMovies extends StartupSystem {
 				try{
 					System.out.print("Digite o codigo do filme: ");
 					chooseMovie = scanner.nextInt();
-					error = false;
+					
+					if(mapMovieData.get(chooseMovie).isSold()){
+						System.out.println("Insira codigo valido");
+						error = true;
+					}else	error = false;
 				}catch (InputMismatchException e) {
 					System.out.println("Insira codigo valido");
 					scanner = new Scanner(System.in);
@@ -128,7 +132,11 @@ public class ManageMovies extends StartupSystem {
 			try{
 				System.out.print("Digite o codigo da sala: ");
 				chooseRoom = scanner.nextInt();
-				error = false;
+				
+				if(mapRoomData.get(chooseRoom).isSold()){
+					System.out.println("Insira codigo valido");
+					error = true;
+				}else	error = false;
 			}catch (InputMismatchException e) {
 				System.out.println("Insira codigo valido");
 				scanner = new Scanner(System.in);
@@ -206,6 +214,7 @@ public class ManageMovies extends StartupSystem {
 	 * Exibe todos os filmes
 	 */
 	protected void viewMovie(String restriction) {
+		Integer currentId;
 		if (mapMovieData.isEmpty()) {
 			System.out.println("\nNao existem filmes cadastrados");
 		} else {
@@ -227,12 +236,11 @@ public class ManageMovies extends StartupSystem {
 			System.out.println("Nao existem salas cadastradas");
 		} else {
 			System.out.println("\nExibindo sala...");
-			Iterator<Integer> iterator = mapRoomData.keySet().iterator();
-			while (iterator.hasNext()){
+			for (Integer currentId : mapRoomData.keySet()){
 				if(restriction.equals("delete") ||  restriction.equals("modify")){
-					if(!mapRoomData.get(iterator.next()).isSold())
-						mapRoomData.get(iterator.next()).toShow();
-				}else mapRoomData.get(iterator.next()).toShow();
+					if(!mapRoomData.get(currentId).isSold())
+						mapRoomData.get(currentId).toShow();
+				}else mapRoomData.get(currentId).toShow();
 			}
 		}
 	}
