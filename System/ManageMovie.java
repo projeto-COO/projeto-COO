@@ -3,14 +3,27 @@ package System;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import startup.DataHours;
-import moviesData.MovieData;
+import MoviesData.MovieData;
+import Startup.DataHours;
+
 
 /**
+ * PADRÃO SINGLETON
+ */
+
+ /**
  *Classe responsavel por gerenciar todas as tarefas do filme
  */
 public class ManageMovie extends ManageMovies {
-
+	private static ManageMovie instance;
+	
+	public ManageMovie() {}
+	
+	public static ManageMovie getInstance() {
+		if (instance==null)	instance = new ManageMovie();
+		return instance;
+	}
+	
 	/**
 	 * Exibi um menu no qual ele pode escolher se quer exibir, criar, modificar ou excluir um filme
 	 */

@@ -1,9 +1,10 @@
 //OK 17:00 17/05
-package moviesData;
+package MoviesData;
 
 import java.io.Serializable;
 
-import startup.DataHours;
+import Startup.DataHours;
+
 
 /**
  * Classe que possui todos os atributos de um Filme

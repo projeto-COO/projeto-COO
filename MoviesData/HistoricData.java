@@ -1,4 +1,4 @@
-package moviesData;
+package MoviesData;
 
 import java.io.*;
 import java.io.BufferedWriter;

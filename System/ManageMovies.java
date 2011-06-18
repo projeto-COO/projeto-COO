@@ -16,14 +16,19 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
 
-import startup.DataHours;
-import startup.StartupSystem;
+import MoviesData.MovieData;
+import MoviesData.RoomData;
+import MoviesData.SessionData;
+import Startup.DataHours;
+import Startup.StartupSystem;
 
-import moviesData.MovieData;
-import moviesData.RoomData;
-import moviesData.SessionData;
+
 
 /**
+ * PADRÃO SINGLETON
+ */
+
+ /**
  * Esta classe gerencia todo o cinema, filmes, salas e sessoes.
  * @author ricardo
  *
@@ -31,8 +36,17 @@ import moviesData.SessionData;
 @SuppressWarnings("unused")
 public class ManageMovies extends StartupSystem {
 	
+	private static ManageMovies instance;
+	
+	public ManageMovies() {}
+	
+	public static ManageMovies getInstance() {
+		if (instance==null)	instance = new ManageMovies();
+		return instance;
+	}
+	
 	/**
-	 * Exibe um menu no qual será escolhido qual areas irá ser mexida 
+	 * Exibe um menu no qual será escolhido qual area irá ser mexida 
 	 */
 	public void mainScreem() {
 		Scanner scanner = new Scanner(System.in);
@@ -65,15 +79,15 @@ public class ManageMovies extends StartupSystem {
 
 			switch (option) {
 			case 1:
-				ManageSession manageSession = new ManageSession();
+				ManageSession manageSession = ManageSession.getInstance();
 				manageSession.optionSession();
 				break;
 			case 2:
-				ManageMovie manageMovie = new ManageMovie();
+				ManageMovie manageMovie = ManageMovie.getInstance();
 				manageMovie.optionMovie();
 				break;
 			case 3:
-				ManageRoom manageRoom = new ManageRoom();
+				ManageRoom manageRoom = ManageRoom.getInstance();
 				manageRoom.optionRoom();
 				break;
 			case 4:

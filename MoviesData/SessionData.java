@@ -1,8 +1,9 @@
 //OK 17:00 17/5 
-package moviesData;
+package MoviesData;
 
 import java.io.Serializable;
-import startup.DataHours;
+
+import Startup.DataHours;
 
 /**
  * Classe que possui todos os atributos de uma Sessao

@@ -1,4 +1,4 @@
-package startup;
+package Startup;
 
 import java.util.*;
 import java.io.FileInputStream;
@@ -7,14 +7,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import moviesData.*;
+
+import MoviesData.*;
 import System.ManageMovies;
 import System.TicketSale;
 
 /**
  * Classe StartupSystem: Ela gerencia todo o sistema
- * 
- *
  */
 @SuppressWarnings("unused")
 public class StartupSystem {
@@ -39,8 +38,7 @@ public class StartupSystem {
 		
 		do{
 			do {
-				try {
-					
+				try {					
 					System.out.println("\nO que voce deseja fazer: ");
 					System.out.println("\tGerenciar o sistema (1)");
 					if(!mapSessionData.isEmpty())System.out.println("\tVender entradas para o cinema (2)");
@@ -66,12 +64,12 @@ public class StartupSystem {
 			
 			switch (option) {
 				case 1:
-					ManageMovies generateMovies = new ManageMovies();
+					ManageMovies generateMovies = ManageMovies.getInstance();
 					generateMovies.mainScreem();
 					break;
 				case 2:
 					if(mapSessionData.isEmpty()) break; 
-					TicketSale ticketSales = new TicketSale();
+					TicketSale ticketSales = TicketSale.getInstance();
 					ticketSales.mainScreem();
 					break;
 				case 3:

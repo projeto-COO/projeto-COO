@@ -2,13 +2,26 @@ package System;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import moviesData.RoomData;
+
+import MoviesData.RoomData;
 
 /**
+ * PADRÃO SINGLETON
+ */
+
+ /**
  *Classe responsavel por gerenciar todas as tarefas da sala
  */
 public class ManageRoom extends ManageMovies {
-
+	private static ManageRoom instance;
+	
+	public ManageRoom() {}
+	
+	public static ManageRoom getInstance() {
+		if (instance==null)	instance = new ManageRoom();
+		return instance;
+	}
+	
 	/**
 	 * Exibi um menu no qual ele pode escolher se quer exibir, criar, modificar ou excluir uma sala
 	 */

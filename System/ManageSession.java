@@ -4,16 +4,29 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.TreeMap;
 
-import startup.DataHours;
-import moviesData.MovieData;
-import moviesData.RoomData;
-import moviesData.SessionData;
+import MoviesData.MovieData;
+import MoviesData.RoomData;
+import MoviesData.SessionData;
+import Startup.DataHours;
+
 
 /**
+ * PADRÃO SINGLETON
+ */
+
+ /**
  *Classe responsavel por gerenciar todas as tarefas da sessao
  */
 public class ManageSession extends ManageMovies {
+	private static ManageSession instance;
 	SessionData chooseSession;
+	
+	public ManageSession() {}
+	
+	public static ManageSession getInstance() {
+		if (instance==null)	instance = new ManageSession();
+		return instance;
+	}
 
 	/**
 	 * Exibi um menu no qual ele pode escolher se quer exibir, criar, modificar

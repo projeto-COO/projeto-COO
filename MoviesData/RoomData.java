@@ -1,5 +1,5 @@
 //OK 17:00 17/05
-package moviesData;
+package MoviesData;
 
 import java.io.Serializable;
 

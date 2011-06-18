@@ -3,20 +3,34 @@ package System;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import moviesData.HistoricData;
-import moviesData.SessionData;
-import startup.StartupSystem;
+import MoviesData.HistoricData;
+import MoviesData.SessionData;
+import Startup.StartupSystem;
+
 
 /**
+ * PADRÃO SINGLETON
+ */
+
+ /**
  * Classe responsavel pela venda de ingressos
  * @author ricardo
  *
  */
 public class TicketSale extends StartupSystem {
 
+	private static TicketSale instance;
+	
+	public TicketSale() {}
+	
+	public static TicketSale getInstance() {
+		if (instance==null)	instance = new TicketSale();
+		return instance;
+	}
+	
 	HistoricData historic = new HistoricData();
-	public int spots =0;
 	private SessionData currentSession;
+	public int spots =0;
 
 	public void mainScreem() {
 		Scanner scanner = new Scanner(System.in);
