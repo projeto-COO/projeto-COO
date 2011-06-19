@@ -11,7 +11,7 @@ import Startup.DataHours;
 
 
 /**
- * PADRÃO SINGLETON
+ * Padrão Singleton
  */
 
  /**
@@ -89,6 +89,16 @@ public class ManageSession extends ManageMovies {
 		Integer chooseRoom;
 		boolean newData = false;
 		
+		if(mapMovieData.isEmpty()){
+			System.out.print("\nE necessario criar Filmes.");
+			return;
+		}
+		if(mapRoomData.isEmpty()){
+			System.out.print("\nE necessario criar Salas.");
+			return;
+		}
+		
+		
 		System.out.print("\nCriando sessao...");
 		MovieData currentMovieData = chooseMovie("create");
 
@@ -129,7 +139,7 @@ public class ManageSession extends ManageMovies {
 		
 		mapSessionData.get(newSession.getCurrentRoom().getIdRoom()).put(newSession.getIdSession(), newSession);		
 		
-		historic.AddHistoricModify("Criada a Sessao: " + newSession.toString());
+		historic.AddHistoric(newSession,"CREATED");
 		System.out.println("Sessao criada");
 		uploadData();
 		return;
@@ -196,13 +206,12 @@ public class ManageSession extends ManageMovies {
 			} while (repeate);
 			
 			if(mapSessionData.get(this.chooseSession.getCurrentRoom().getIdRoom()) == null){
-				mapSessionData.put(this.chooseSession.getCurrentRoom().getIdRoom(), 
-						new TreeMap<String,SessionData>());
+				mapSessionData.put(this.chooseSession.getCurrentRoom().getIdRoom(),	new TreeMap<String,SessionData>());
 			}
 			
 			mapSessionData.get(this.chooseSession.getCurrentRoom().getIdRoom())
-			.put(this.chooseSession.getIdSession(), this.chooseSession);				
-						
+			.put(this.chooseSession.getIdSession(), this.chooseSession);	
+			historic.AddHistoric(this.chooseSession,"MODIFIED");
 			System.out.println("Sessao modificada");
 			uploadData();
 		}
@@ -221,10 +230,8 @@ public class ManageSession extends ManageMovies {
 				return;
 			} else {
 				System.out.println("\nExcluida a sessao");
-				mapSessionData.get(this.chooseSession.getCurrentRoom().getIdRoom())
-						.remove(this.chooseSession.getIdSession());
-				historic.AddHistoricModify("Excluida a sessao: "
-						+ this.chooseSession.toString());
+				mapSessionData.get(this.chooseSession.getCurrentRoom().getIdRoom()).remove(this.chooseSession.getIdSession());
+				historic.AddHistoric(this.chooseSession,"DELETED");
 				uploadData();
 			}
 		}

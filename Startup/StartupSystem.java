@@ -9,19 +9,27 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import MoviesData.*;
+import System.HistoricFactory;
+import System.HistoricFactory;
 import System.ManageMovies;
 import System.TicketSale;
 
 /**
+ * Padrão Template Method
+ */
+
+ /**
  * Classe StartupSystem: Ela gerencia todo o sistema
  */
 @SuppressWarnings("unused")
-public class StartupSystem {
+public abstract class StartupSystem {
 
 	protected static Map<Integer,MovieData> mapMovieData;
 	protected static Map<Integer,RoomData> mapRoomData;
-	protected static Map<Integer, Map<String,SessionData>> mapSessionData;
-	protected static HistoricData historic = new HistoricData();
+	protected static Map<Integer, Map<String,SessionData>> mapSessionData;  
+	protected static List<HistoricData> listHistoricData;
+	protected static HistoricFactory historic;
+
 	/**
 	 * Metodo responsavel pelo escolha de direcionamento de tarefa, como gerenciar, historicos e
 	 * vender ingressos
@@ -30,25 +38,25 @@ public class StartupSystem {
 	public static void main(String[] args) {
 		System.out.println("\t** Cine & Pipoca ***");
 		downloadData();
+		historic = HistoricFactory.getInstance();
 		
 		Scanner scanner = new Scanner(System.in);
 		int option = 0;
 		boolean test = false;
 		boolean repeate = true;
-		
+			
 		do{
 			do {
-				try {					
+				try {
 					System.out.println("\nO que voce deseja fazer: ");
 					System.out.println("\tGerenciar o sistema (1)");
 					if(!mapSessionData.isEmpty())System.out.println("\tVender entradas para o cinema (2)");
-					System.out.println("\tHistorico de Gerenciamento(3)");
-					System.out.println("\tHistorico de Compra(4)");
-					System.out.println("\tSair do Sistema(5)");
+					System.out.println("\tHistoricos(3)");
+					System.out.println("\tSair do Sistema(4)");
 					System.out.print("Digite o codigo: ");
 					option = scanner.nextInt();
 					
-					if(option<1 || option>5)test = false;
+					if(option<1 || option>4)test = false;
 					else test = true;
 				} catch (InputMismatchException e) {
 					System.out.println("Digite novamente.");
@@ -73,16 +81,13 @@ public class StartupSystem {
 					ticketSales.mainScreem();
 					break;
 				case 3:
-					historic.printHistoicModify();
+					historic.mainScreem();
 					break;
 				case 4:
-					historic.printHistoicSellers();
-					break;
-				case 5:
 					sairDoSistema();
 					repeate = false;
 					break;
-			}			
+			}
 		}while(repeate);
 	}
 	
@@ -92,7 +97,8 @@ public class StartupSystem {
 	private static void initializeCollectins() {
 		if(mapSessionData == null)mapSessionData = new TreeMap<Integer, Map<String,SessionData>>();
 		if(mapMovieData == null)mapMovieData = new TreeMap<Integer, MovieData>();
-		if(mapRoomData == null)mapRoomData = new TreeMap<Integer, RoomData>();		
+		if(mapRoomData == null)mapRoomData = new TreeMap<Integer, RoomData>();
+		if(listHistoricData == null)listHistoricData = new LinkedList<HistoricData>();
 	}
 	
 	/**
@@ -139,7 +145,13 @@ public class StartupSystem {
 			mapSessionData = (Map<Integer, Map<String,SessionData>>)fSessionIn.readObject();
 			fSessionIn.close(); 
 			fluxoSessionIn.close();
-	
+			
+			FileInputStream fluxoHistoricIn = new FileInputStream("fileHistoric.ser");
+			ObjectInputStream fHistoricIn = new ObjectInputStream(fluxoHistoricIn);
+			listHistoricData = (LinkedList<HistoricData>)fHistoricIn.readObject();
+			fHistoricIn.close();
+			fluxoHistoricIn.close();
+			
 		} catch (FileNotFoundException fileNotFound) {
 			uploadData();
 		} catch (IOException io) {
@@ -174,6 +186,12 @@ public class StartupSystem {
 			objSession.writeObject(mapSessionData);
 			objSession.close();
 			sessionOut.close();
+			
+			FileOutputStream historicOut = new FileOutputStream("fileHistoric.ser");
+			ObjectOutputStream objHistoric = new ObjectOutputStream(historicOut);
+			objHistoric.writeObject(listHistoricData);
+			objHistoric.close();
+			historicOut.close();
 			
 		} catch (FileNotFoundException fileNotFound) {
 			System.out.println("9");

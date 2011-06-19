@@ -87,13 +87,13 @@ public class MovieData implements Serializable {
 
 	public String toString() {
 		return "Codigo:" + idMovie + "\tNome-" + name + "\tGenero-" + gender
-				+ "\tF.E.:" + ageRate + "\t-" + language + "\tDuracao: " + 
+				+ "\tF.E.:" + ageRate + "\tIdioma-" + language + "\tDuracao: " + 
 				duration.hh() + ":" + duration.mm() ;
 	}
 
 	public void toShow() {
 		System.out.println("Codigo:" + idMovie + "\tNome-" + name + "\tGenero-"
-				+ gender + "\tF.E.:" + ageRate + "\t-" + language + "\tDuracao: " + 
+				+ gender + "\tF.E.:" + ageRate + "\tIdioma-" + language + "\tDuracao: " + 
 				duration.hh() + ":" + duration.mm() + "\tVenda: "
 				+ (isSold() ? "True" : "False"));
 	}

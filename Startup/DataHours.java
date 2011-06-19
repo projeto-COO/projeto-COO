@@ -1,4 +1,3 @@
-//OK 17:00 17/05
 package Startup;
 
 import java.io.Serializable;
@@ -13,7 +12,7 @@ public class DataHours implements Serializable {
 	Integer yyyy;
 	Integer hh;
 	Integer mm;
-	
+
 	public DataHours(Integer dd, Integer MM, Integer yyyy, Integer hh, Integer mm) {
 		this.dd = dd;
 		this.MM = MM;
@@ -21,12 +20,12 @@ public class DataHours implements Serializable {
 		this.hh = hh;
 		this.mm =mm;
 	}
-	
+
 	public DataHours(Integer hh, Integer mm) {
 		this.hh = hh;
 		this.mm =mm;
 	}
-	
+
 	public Integer dd() {
 		return dd;
 	}
@@ -42,7 +41,7 @@ public class DataHours implements Serializable {
 	public Integer mm() {
 		return mm;
 	}
-	
+
 	public void setdd(Integer dd) {
 		this.dd = dd;
 	}
@@ -64,9 +63,9 @@ public class DataHours implements Serializable {
 	}
 
 	public String toString(){
-		return dd.toString()+MM.toString()+yyyy.toString()+hh.toString()+mm.toString();
+		return dd.toString()+"/"+MM.toString()+"/"+yyyy.toString()+" "+hh.toString()+":"+mm.toString();
 	}
-	
+
 	public String toDuration(){
 		return hh.toString() + ":" + mm.toString();
 	}

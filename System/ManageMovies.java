@@ -25,7 +25,7 @@ import Startup.StartupSystem;
 
 
 /**
- * PADRÃO SINGLETON
+ * Padrão Singleton
  */
 
  /**

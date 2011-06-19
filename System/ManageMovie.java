@@ -6,9 +6,8 @@ import java.util.Scanner;
 import MoviesData.MovieData;
 import Startup.DataHours;
 
-
 /**
- * PADRÃO SINGLETON
+ * Padrão Singleton
  */
 
  /**
@@ -97,7 +96,8 @@ public class ManageMovie extends ManageMovies {
 		MovieData newMovieData = new MovieData(idMovie, name, gender, ageRate,
 				dimension, language, duration);
 		mapMovieData.put(idMovie, newMovieData);
-		historic.AddHistoricModify("Criado o fime: " + newMovieData.toString());
+		
+		historic.AddHistoric(newMovieData,"CREATED");
 		uploadData();
 		System.out.println("Filme criado");
 	}
@@ -152,8 +152,7 @@ public class ManageMovie extends ManageMovies {
 		currentMovie.setDuration(selectDuration(duration));
 		
 		mapMovieData.put(currentMovie.getIdMovie(), currentMovie);
-		historic.AddHistoricModify("Modificado o fime: "
-				+ currentMovie.toString());
+		historic.AddHistoric(currentMovie.toString(),"MODIFIED");
 		uploadData();
 	}
 	
@@ -177,9 +176,7 @@ public class ManageMovie extends ManageMovies {
 			}
 
 			mapSessionData.remove(currentMovie.getIdMovie());
-			historic
-					.AddHistoricModify("Excluido o filme e todas as suas sessoes: "
-							+ currentMovie.toString());
+			historic.AddHistoric(currentMovie.toString(),"DELETED");
 			uploadData();
 		}
 	}

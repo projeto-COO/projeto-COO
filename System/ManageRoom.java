@@ -6,7 +6,7 @@ import java.util.Scanner;
 import MoviesData.RoomData;
 
 /**
- * PADRÃO SINGLETON
+ * Padrão Singleton
  */
 
  /**
@@ -91,7 +91,7 @@ public class ManageRoom extends ManageMovies {
 
 		RoomData newRoomData = new RoomData(idRoom, rows, columns);
 		mapRoomData.put(idRoom, newRoomData);
-		historic.AddHistoricModify("Criada a sala: " + newRoomData.toString());
+		historic.AddHistoric(newRoomData, "CREATED");
 		uploadData();
 		System.out.println("Sala criada");
 	}
@@ -136,8 +136,7 @@ public class ManageRoom extends ManageMovies {
 		currentRoom.setRows(rows);
 		currentRoom.setColumns(columns);
 		mapRoomData.put(currentRoom.getIdRoom(), currentRoom);
-		historic.AddHistoricModify("Modificada a sala: "
-				+ currentRoom.toString());
+		historic.AddHistoric(currentRoom, "MODIFIED");
 		uploadData();
 	}
 
@@ -153,9 +152,7 @@ public class ManageRoom extends ManageMovies {
 			System.out.println("\nExcluida a sala e todas as suas sessoes");
 			mapRoomData.remove(currentRoom.getIdRoom());
 			mapSessionData.remove(currentRoom.getIdRoom());
-			historic
-					.AddHistoricModify("Excluida a sala e todas as suas sessoes: "
-							+ currentRoom.toString());
+			historic.AddHistoric(currentRoom,"DELETED");
 			uploadData();
 		}
 	}
