@@ -52,7 +52,6 @@ public class TicketSale extends StartupSystem {
 					sessionEmpty = false;
 			} while (sessionEmpty);
 
-			currentSession.updateAvailability(verifySpots(currentSession));
 			System.out.println("Quantidade de Lugares Disponiveis: "+ currentSession.getAvailability());
 			do {
 				System.out.print("Confirmar Compra(Sim(1)/ Nao(2))? ");
@@ -60,6 +59,7 @@ public class TicketSale extends StartupSystem {
 			} while (endBuy != 1 && endBuy != 2);
 
 			if (endBuy == 1) {
+				currentSession.updateAvailability(verifySpots(currentSession));
 				historic.AddHistoric(currentSession, "SOLD");
 				System.out.println("\nCompra Finalizada Com Sucesso. Imprimindo Ticket.");
 				tagsale(currentSession);
